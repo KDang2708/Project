@@ -28,8 +28,7 @@ class Config:
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True
-    DATABASE_URI = os.environ.get('POSTGREE_DATABASE_URL')
-
+    DATABASE_URI = os.environ.get('POSTGRES_DATABASE_URL')
 
 class TestingConfig(Config):
     """Testing configuration."""

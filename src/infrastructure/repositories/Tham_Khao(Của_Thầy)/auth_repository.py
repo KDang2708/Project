@@ -1,26 +1,26 @@
 from domain.models.iauth_repository import IAuthRepository
 from domain.models.auth import Auth
-from infrastructure.databases import Base
+from infrastructure.databases import Base # không cần vì repository không định nghĩa bảng mới(tức là không cần tạo bảng mới)
 from typing import List, Optional
 from dotenv import load_dotenv
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-from config import Config
-from sqlalchemy import Column, Integer, String, DateTime
-from infrastructure.databases.factory_database import FactoryDatabase as db_factory
-from infrastructure.databases.mssql import session
+from sqlalchemy.orm import sessionmaker, declarative_base # ko cần vì repository không khai báo base  , base chỉ cần trong định nghĩa orm model
+from config import Config # không cần vì repo không cần cấu hình db trực tiếp
+from sqlalchemy import Column, Integer, String, DateTime # không cần vì repo không định nghĩa schema mới , các import này chỉ định nghĩa trong ORM model
+from infrastructure.databases.factory_database import FactoryDatabase as db_factory # rep sẽ bị phụ thuộc vào factory tạo db , làm repo khó test hơn
+from infrastructure.databases.mssql import session # repo bị khóa cứng với session từ mssql , nên lấy session từ factory db
 from sqlalchemy.orm import Session
-from infrastructure.models.auth.auth_user_model import AuthUserModel
+from infrastructure.models.auth.auth_user_model import AuthUserModel # ko dùng = thừa
 from infrastructure.models.user_model import UserModel
-load_dotenv()
+load_dotenv() # ko cần trong file này
 
 
 class AuthRepository(IAuthRepository):
     def __init__(self, session: Session = session):
         self._users = []
         self._id_counter = 1
-        self.session = db_factory.get_database('POSTGREE').session
+        self.session = db_factory.get_database('POSTGRES').session
     
     def login(self, auth: Auth) -> Auth:
         # Implement login logic here

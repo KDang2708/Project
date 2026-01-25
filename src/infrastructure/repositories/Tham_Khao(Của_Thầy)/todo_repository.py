@@ -12,13 +12,16 @@ from sqlalchemy.orm import Session
 from infrastructure.models.todo_model import TodoModel
 from infrastructure.databases.mssql import session
 from infrastructure.databases.factory_database import FactoryDatabase as db_factory
-load_dotenv()
+
+#from sqlalchemy.orm import Session
+# from domain.models.itodo_repository import ITodoRepository
+# from infrastructure.models.todo_model import TodoModel
 
 class TodoRepository(ITodoRepository):
-    def __init__(self, session: Session = db_factory.get_database('POSTGREE').session):
+    def __init__(self, session: Session):
         self._todos = []
         self._id_counter = 1
-        self.session = db_factory.get_database('POSTGREE').session
+        self.session = session
 
     def add(self, todo: Todo) -> TodoModel:
         try:

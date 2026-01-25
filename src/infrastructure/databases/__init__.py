@@ -8,7 +8,7 @@ from infrastructure.models.pay import pay_tran_model
 
 def init_db(app):
     # init_mssql(app)
-    FactoryDatabase.get_database('POSTGREE').init_database(app)
+    FactoryDatabase.get_database('POSTGRES').init_database(app)
     # init_postgres(app)
     
 # Migration Entities -> tables
