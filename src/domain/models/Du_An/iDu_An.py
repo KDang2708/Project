@@ -13,3 +13,6 @@ class IDuAn(ABC):
     @abstractmethod
     def set_lop(self , du_an : DuAn , lop_hoc : LopHoc )->DuAn:
         pass
+    @abstractmethod
+    def get_all(self)->list[DuAn]:
+        pass
