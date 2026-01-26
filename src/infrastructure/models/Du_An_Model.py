@@ -13,6 +13,6 @@ class DuAnORM(Base):
 
     id = Column(String, primary_key=True)      # cột ID, kiểu String, là khóa chính
     noi_dung = Column(String)                   # cột nội dung dự án, kiểu String
-    trang_thai = Column(Boolean)                # cột trạng thái dự án, kiểu Boolean
+    trang_thai = Column(Boolean , default=False)                # cột trạng thái dự án, kiểu Boolean
     id_nguoi_tao = Column(String)               # cột ID người tạo dự án, kiểu String
-    
+    id_lop_hoc = Column(String, nullable=True)

@@ -7,3 +7,4 @@ class DuAn():
         self.noi_dung = noi_dung
         self.trang_thai = False
         self.nguoi_tao = nguoi_tao
+        self.lop_hoc = None

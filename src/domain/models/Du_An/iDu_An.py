@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from domain.models.Du_An.Du_An import DuAn
+from domain.models.Lop_Hoc.Lop_Hoc import LopHoc
 
 class IDuAn(ABC):
     @abstractmethod
@@ -8,4 +9,7 @@ class IDuAn(ABC):
 
     @abstractmethod
     def get_by_id(self, id: str) -> DuAn | None:
+        pass
+    @abstractmethod
+    def set_lop(self , du_an : DuAn , lop_hoc : LopHoc )->DuAn:
         pass
