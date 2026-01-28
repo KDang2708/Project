@@ -31,3 +31,11 @@ class MonHocRepositoty(IMonHocRepository):
             tin_chi=orm.tin_chi,
             de_cuong=orm.de_cuong
         )
+    def get_by_id(self, id_mon_hoc : str)->MonHoc:
+        orm = self.session.query(MonHocORM).filter(MonHocORM.id == id_mon_hoc).first()
+        return MonHoc(
+            id=orm.id,
+            ten=orm.ten,
+            tin_chi=orm.tin_chi,
+            de_cuong=orm.de_cuong
+        )

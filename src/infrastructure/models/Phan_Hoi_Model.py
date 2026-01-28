@@ -13,4 +13,4 @@ class PhanHoiORM(Base):
     id = Column(String, primary_key=True , default=lambda:str(uuid.uuid4()))  # cột ID, kiểu String, là khóa chính
     noi_dung = Column(String)               # cột nội dung phản hồi, kiểu String
     ngay_gui = Column(DateTime , server_default=func.now() )                 # cột ngày gửi, kiểu Date
-    id_bao_cao = Column(String, ForeignKey("bao_cao.id"))
+    id_bao_cao = Column(String, ForeignKey("bao_cao.id")) 

@@ -35,6 +35,7 @@ class TaiKhoanRepository(ITaiKhoanRepository):
         self.session.add(orm)
         self.session.commit() # Lưu thay đổi vào cơ sở dữ liệu
         return self._to_domain(orm) # Trả về đối tượng domain đã được lưu để sử dụng tiếp
+    
     def get_all(self)->list[TaiKhoan]:
         orm_list : list[TaiKhoanORM]= self.session.query(TaiKhoanORM).all()
         return [

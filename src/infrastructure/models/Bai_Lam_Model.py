@@ -16,5 +16,5 @@ class BaiLamORM(Base):
     id = Column(String, primary_key=True)              # cột ID, kiểu String, là khóa chính
     noi_dung_bai_lam = Column(String)                  # cột nội dung bài làm, kiểu String
     loai_bai_lam = Column(int)    # 0 là bài kiểm tra, 1 là nhiệm vụ
-    id_bai_lam = Column(String)               # cột ID bài kiểm tra hoặc nhiệm vụ liên kết, kiểu String
+    id_bai_kiem_tra = Column(String)               # cột ID bài kiểm tra hoặc nhiệm vụ liên kết, kiểu String
     id_sinh_vien_thuc_hien = Column(String)           # cột ID sinh viên thực hiện, kiểu String

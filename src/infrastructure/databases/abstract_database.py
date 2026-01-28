@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 import os
-
-import psycopg2
 from psycopg2 import sql
 # from psycopg2.extras import RealDictCursor
 from contextlib import contextmanager
@@ -24,4 +22,3 @@ class AbstractDatabase(ABC):
             bind=self.engine
         )
         self.session = self.SessionLocal()
-        

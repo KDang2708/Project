@@ -19,3 +19,6 @@ class ILopHocRepository(ABC):
     @abstractmethod
     def get_all(self)->list[LopHoc]:
         pass
+    @abstractmethod
+    def get_lop_by_sinh_vien(self , sinh_vien : SinhVien)->list[LopHoc]:
+        pass

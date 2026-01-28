@@ -6,5 +6,5 @@ class ISinhVienRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, id: int) -> SinhVien | None:
+    def get_by_id(self, id_sinh_vien: str) -> SinhVien:
         pass

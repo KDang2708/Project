@@ -16,3 +16,9 @@ class IDuAn(ABC):
     @abstractmethod
     def get_all(self)->list[DuAn]:
         pass
+    @abstractmethod
+    def duyet_du_an(self , du_an : DuAn)->DuAn:
+        pass
+    @abstractmethod
+    def huy_duyet_du_an(self , du_an : DuAn)->DuAn:
+        pass

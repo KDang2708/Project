@@ -42,3 +42,20 @@ class DuAnRepository(IDuAn):
             )
             for orm in orm_list
         ]
+
+    def duyet_du_an(self, du_an : DuAn)->DuAn:
+        orm = self.session.query(DuAnORM).filter(DuAnORM.id == du_an.id).first()
+        if orm is None:
+            raise Exception("Dự án không tồn tại !")
+        orm.trang_thai = True
+        du_an.trang_thai = orm.trang_thai
+        self.session.commit()
+        return du_an
+    def huy_duyet_du_an(self, du_an: DuAn)->DuAn:
+        orm = self.session.query(DuAnORM).filter(DuAnORM.id==du_an.id).first()
+        if orm is None:
+            raise Exception("Dự án không tồn tại !")
+        orm.trang_thai = False
+        du_an.trang_thai = orm.trang_thai
+        self.session.commit()
+        return du_an
