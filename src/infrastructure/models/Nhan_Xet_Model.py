@@ -9,8 +9,8 @@ from infrastructure.databases.base import Base
 from sqlalchemy import Column , String , ForeignKey
 import uuid
 
-class NhiemVuORM(Base):
-    __tablename__ = "nhiem_vu"
+class NhanXetORM(Base):
+    __tablename__ = "nhan_xet"
 
     id = Column(String , primary_key=True , default=lambda : str(uuid.uuid4()))
     noi_dung_nhan_xet = Column(String)

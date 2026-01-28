@@ -17,4 +17,20 @@ class MocQuanTrongRepository(IMocQuanTrongRepository):
         )
         for o in orm 
         ]
+    def add(self, moc_quan_trong : MocQuanTrong)->MocQuanTrong:
+        orm = MocQuanTrongORM(
+            noi_dung = moc_quan_trong.noi_dung,
+            id_mon_hoc = moc_quan_trong.mon_hoc.id,
+            loai_moc = moc_quan_trong.loai_moc
+        )
+        self.session.add(orm)
+        self.session.flush()
+        moc_quan_trong.id=orm.id
+        self.session.commit()
+        return moc_quan_trong
+    
+    # id = Column(String, primary_key=True)      # cột ID, kiểu String, là khóa chính
+    # noi_dung = Column(String)                   # cột nội dung mốc quan trọng, kiểu String
+    # id_mon_hoc = Column(String)                 # cột ID môn học liên kết, kiểu String
+    # loai_moc = Column(String)                   # cột loại mốc quan trọng, kiểu String
     

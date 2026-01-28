@@ -18,6 +18,7 @@ class NhiemVuRepository(INhiemVuRepository):
             nguoi_tao = self.repo_giang_vien.get_by_id(orm.id_nguoi_tao) # viết thêm hàm get_by_id
         return NhiemVu(
             id = orm.id,
+            noi_dung=orm.noi_dung,
             id_nguoi_thuc_hien=orm.id_nguoi_thuc_hien,
             id_nguoi_tao= orm.id_nguoi_tao,
             vai_tro_nguoi_tao=orm.vai_tro_nguoi_tao,
@@ -25,6 +26,20 @@ class NhiemVuRepository(INhiemVuRepository):
             ngay_ket_thuc=orm.ngay_ket_thuc
         )
 
+    def add(self, nhiem_vu : NhiemVu)->NhiemVu:
+        orm = NhiemVuORM(
+            noi_dung = nhiem_vu.noi_dung,
+            id_nguoi_thuc_hien = nhiem_vu.nguoi_thuc_hien.id,
+            id_nguoi_tao = nhiem_vu.nguoi_tao.id,
+            vai_tro_nguoi_tao = nhiem_vu.nguoi_tao.tai_khoan.vai_tro,
+            ngay_bat_dau = nhiem_vu.ngay_bat_dau,
+            ngay_ket_thuc = nhiem_vu.ngay_ket_thuc
+        )
+        self.session.add(orm)
+        self.session.flush()
+        nhiem_vu.id = orm.id
+        self.session.commit()
+        return nhiem_vu
 
 
 # from datetime import date
@@ -34,6 +49,7 @@ class NhiemVuRepository(INhiemVuRepository):
 #     def __init__(self, id_nguoi_thuc_hien: HocSinh, ngay_bat_dau: date, ngay_ket_thuc: date, id_nguoi_tao: GiangVien | HocSinh):
 #         self.id = None  # ID sẽ được gán khi lưu vào cơ sở dữ liệu
 #         self.id_nguoi_thuc_hien = id_nguoi_thuc_hien
+#         self.noi_dung = noi_dung
 #         self.ngay_bat_dau = ngay_bat_dau
 #         self.ngay_ket_thuc = ngay_ket_thuc
 #         self.id_nguoi_tao = id_nguoi_tao

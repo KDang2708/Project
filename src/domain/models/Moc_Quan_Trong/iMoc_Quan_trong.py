@@ -7,7 +7,7 @@ class IMocQuanTrongRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, id: str) -> MocQuanTrong | None:
+    def get_by_id(self, id: str) -> MocQuanTrong :
         pass
     @abstractmethod
     def get_by_mon_hoc(self , mon_hoc : MonHoc )->MocQuanTrong:

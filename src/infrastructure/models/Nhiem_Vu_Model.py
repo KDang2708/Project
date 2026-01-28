@@ -16,10 +16,10 @@ class NhiemVuORM(Base):
     id = Column(String, primary_key=True)          # cột ID, kiểu String, là khóa chính
     noi_dung = Column(String)
     id_nguoi_thuc_hien = Column(String)  # người thực hiện là sinh viên         # cột ID người thực hiện, kiểu String
-    ngay_bat_dau = Column(DateTime , server_default=func.now())                    # cột ngày bắt đầu, kiểu Date
-    ngay_ket_thuc = Column(DateTime ,  server_default=func.now())                   # cột ngày kết thúc, kiểu Date
+    ngay_bat_dau = Column(DateTime )                    # cột ngày bắt đầu, kiểu Date
+    ngay_ket_thuc = Column(DateTime )                   # cột ngày kết thúc, kiểu Date
     id_nguoi_tao = Column(String)                  # cột ID người tạo, kiểu String
-    vai_tro_nguoi_tao = Column(int) # dựa vào đây xác định người tạo 
+    vai_tro_nguoi_tao = Column(String) # dựa vào đây xác định người tạo 
     # class NhiemVu:
     # def __init__(self,id : str | None,id_nguoi_thuc_hien: HocSinh, ngay_bat_dau: datetime | None, ngay_ket_thuc: datetime | None , vai_tro_nguoi_tao : str, id_nguoi_tao: GiangVien | HocSinh):
     #     self.id = id  # ID sẽ được gán khi lưu vào cơ sở dữ liệu
