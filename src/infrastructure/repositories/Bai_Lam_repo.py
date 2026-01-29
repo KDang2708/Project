@@ -14,6 +14,7 @@ class BaiLamRepository(IBaiLamRepository):
             id_sinh_vien_thuc_hien = bai_lam.sinh_vien_thuc_hien.id
         )
         self.session.add(orm)
+        self.session.flush()
         bai_lam.id = orm.id
         self.session.commit()
         return bai_lam

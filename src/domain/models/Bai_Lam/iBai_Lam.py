@@ -6,5 +6,5 @@ class IBaiLamRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, id: str) -> BaiLam | None:
+    def get_by_id(self, id_bai_lam: str) -> BaiLam | None:
         pass

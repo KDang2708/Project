@@ -7,7 +7,7 @@ class IBaiKiemTraRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, id: str) -> BaiKiemTra:
+    def get_by_id(self, id_bai_kiem_tra: str) -> BaiKiemTra:
         pass
     @abstractmethod
     def get_by_mon_hoc(self , mon_hoc : MonHoc)->list[BaiKiemTra]:

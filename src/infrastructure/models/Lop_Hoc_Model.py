@@ -15,10 +15,11 @@
 #         self.danh_sach_hoc_sinh: list[HocSinh] = []
 #         self.danh_sach_nhom: list[Nhom] = []
 from infrastructure.databases.base import Base
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String , ForeignKey
+import uuid
 class LopHocORM(Base):
     __tablename__ = "lop_hoc"  # tên bảng trong cơ sở dữ liệu
 
-    id = Column(String, primary_key=True)      # cột ID, kiểu String, là khóa chính
-    id_mon_hoc = Column(String)                 # cột ID môn học liên kết, kiểu String
-    id_giang_vien = Column(String)              # cột ID giảng viên liên kết, kiểu String
+    id = Column(String, primary_key=True , default=lambda:str(uuid.uuid4()))      # cột ID, kiểu String, là khóa chính
+    id_mon_hoc = Column(String , ForeignKey("mon_hoc"))                 # cột ID môn học liên kết, kiểu String
+    id_giang_vien = Column(String , ForeignKey("giang_vien"))              # cột ID giảng viên liên kết, kiểu String

@@ -1,5 +1,5 @@
 #Báo cáo(IDBaoCao(String), NoiDung(String), NgayGui(Date) , IDNguoiGui(String))
-from sqlalchemy import Column, String, DateTime , func 
+from sqlalchemy import Column, String, DateTime , func ,ForeignKey
 from infrastructure.databases.base import Base
 import uuid
 class BaoCaoORM(Base):
@@ -10,5 +10,5 @@ class BaoCaoORM(Base):
     ngay_gui = Column(DateTime , server_default=func.now())
     id_nguoi_gui = Column(String)
     vai_tro_nguoi_gui = Column(String)
-    id_phan_hoi = Column(String,nullable=True)
+    id_phan_hoi = Column(String , ForeignKey("phan_hoi") , nullable=True  )
 

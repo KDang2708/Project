@@ -16,3 +16,18 @@ class GiangVienRepository(IGiangVienRepository):
             ten=orm.ten,
             tai_khoan=tai_khoan
         )
+    def add(self, giang_vien : GiangVien)->GiangVien:
+        orm = GiangVienORM(
+            ten = giang_vien.ten,
+            id_tai_khoan = giang_vien.tai_khoan.id
+        )
+        self.session.add(orm)
+        self.session.flush()
+        giang_vien.id = orm.id
+        self.session.commit()
+        return giang_vien
+
+
+    #        id = Column(String, primary_key=True , default=lambda : str(uuid.uuid4))  # cột ID, kiểu String, là khóa chính
+    # ten = Column(String)                   # cột tên giảng viên, kiểu String
+    # id_tai_khoan = Column(String) 

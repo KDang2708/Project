@@ -5,11 +5,12 @@
 #         self.ten = ten
 #         self.de_cuong = de_cuong
 from infrastructure.databases.base import Base
-from sqlalchemy import Column, String , int
+from sqlalchemy import Column, String , Integer
+import uuid
 class MonHocORM(Base):
     __tablename__ = "mon_hoc"  # tên bảng trong cơ sở dữ liệu
 
-    id = Column(String, primary_key=True)  # cột ID, kiểu String, là khóa chính
+    id = Column(String, primary_key=True , default=lambda : str(uuid.uuid4()))  # cột ID, kiểu String, là khóa chính
     ten = Column(String)                   # cột tên môn học, kiểu String
     de_cuong = Column(String)              # cột đề cương, kiểu String
-    tin_chi=Column(int)
+    tin_chi=Column(Integer)

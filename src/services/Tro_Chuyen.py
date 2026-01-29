@@ -8,13 +8,21 @@ from domain.models.Nhom.Nhom import Nhom
 class TroChuyenLopUseCase():
     def __init__(self , tin_nhan : ITinNhanRepository):
         self.repo_tin_nhan = tin_nhan
-    def tro_chuyen_lop(self , noi_dung : str, nguoi_gui : SinhVien |GiangVien , lop_hoc : LopHoc , nhom : Nhom|None)->TinNhan:
+    def nhan_tin(self , noi_dung : str, nguoi_gui : SinhVien |GiangVien , lop_hoc : LopHoc , nhom : Nhom|None)->TinNhan:
         tin_nhan = TinNhan(
             nguoi_gui=nguoi_gui,
             noi_dung=noi_dung,
+            lop_hoc=lop_hoc,
+            nhom=nhom
         )
-        
-
+        tin_nhan=self.repo_tin_nhan.add(tin_nhan)
+        return tin_nhan
+    def xem_tin_lop(self , lop_hoc : LopHoc)->list[TinNhan]:
+        dsTN = self.repo_tin_nhan.get_tin_nhan_lop(lop_hoc)
+        return dsTN
+    def xem_tin_nhom(self , lop_hoc : LopHoc , nhom : Nhom)->list[TinNhan]:
+        dsTN = self.repo_tin_nhan.get_tin_nhan_nhom(lop_hoc , nhom)
+        return dsTN
 
 
 

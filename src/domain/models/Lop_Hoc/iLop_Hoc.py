@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from domain.models.Lop_Hoc.Lop_Hoc import LopHoc
 from domain.models.Sinh_Vien.Sinh_Vien import SinhVien
-from domain.models.Nhom.Nhom import Nhom
 class ILopHocRepository(ABC):
     @abstractmethod
     def add(self, lop_hoc: LopHoc) -> LopHoc:

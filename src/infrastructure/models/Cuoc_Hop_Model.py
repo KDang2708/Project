@@ -6,12 +6,13 @@
 #         self.lop_hoc = lop_hoc
 #         self.nhom = nhom
 from infrastructure.databases.base import Base
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime , func , ForeignKey
+import uuid
 class CuocHopORM(Base):
     __tablename__ = "cuoc_hop"  # tên bảng trong cơ sở dữ liệu
 
-    id = Column(String, primary_key=True)          # cột ID, kiểu String, là khóa chính
+    id = Column(String, primary_key=True , default=lambda:str(uuid.uuid4()))          # cột ID, kiểu String, là khóa chính
     thoi_gian_bat_dau = Column(DateTime)           # cột thời gian bắt đầu, kiểu DateTime
     id_nguoi_tao = Column(String)                   # cột ID người tạo, kiểu String
-    id_lop_hoc = Column(String)                     # cột ID lớp học, kiểu String
-    id_nhom = Column(String, nullable=True)                        # cột ID nhóm, kiểu String
+    id_lop_hoc = Column(String , ForeignKey("lop_hoc"))                     # cột ID lớp học, kiểu String
+    id_nhom = Column(String,ForeignKey("nhom") ,  nullable=True)                        # cột ID nhóm, kiểu String
