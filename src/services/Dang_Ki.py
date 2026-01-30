@@ -11,7 +11,7 @@ from domain.models.Nhan_Vien.iNhan_Vien import INhanVienRepository
 from domain.models.Sinh_Vien.iSinh_Vien import ISinhVienRepository
 from domain.models.Truong_Khoa.iTruong_Khoa import ITruongKhoaRepository
 
-class RegisterUseCase:
+class DangKiUseCase():
     def __init__(self, tai_khoan: ITaiKhoanRepository , admin : IAdminRepository , nhan_vien : INhanVienRepository , giang_vien : IGiangVienRepository , sinh_vien : ISinhVienRepository, truong_khoa : ITruongKhoaRepository):
         self.repo_tai_khoan = tai_khoan
         self.repo_admin =admin
