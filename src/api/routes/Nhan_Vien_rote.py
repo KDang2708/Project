@@ -1,0 +1,29 @@
+from fastapi import APIRouter , Depends
+
+from api.controllers.Nhan_Vien_controller import NhanVienController
+from services.Tao_Mon_Hoc import TaoMonHocUseCase
+from services.Xem_Mon_Hoc import XemMonHocUseCase
+from api.schemas.responses.Mon_Hoc import MonHocResponse
+from api.schemas.requests.Tao_Mon_Hoc import TaoMonHocRequest
+from infrastructure.security.dependency import get_current_user
+router = APIRouter(prefix="/nhan_vien",tags=["NhanVien"])
+
+def get_nhan_vien_controller():
+    return NhanVienController(
+        tao_mon_hoc = TaoMonHocUseCase(),
+        xem_mon_hoc= XemMonHocUseCase()
+    )
+
+@router.put("/tao_mon_hoc",response_model = MonHocResponse , status_code=201)
+def tao_mon_hoc(
+    request : TaoMonHocRequest,
+    user = Depends(get_current_user),
+    controller : NhanVienController = Depends(get_nhan_vien_controller)
+):
+    return controller.tao_mon_hoc(request)
+@router.get("/xem_mon_hoc", response_model= MonHocResponse,status_code=200 )
+def xem_mon_hoc(
+    user = Depends(get_current_user),
+    controller : NhanVienController = Depends(get_nhan_vien_controller)
+):
+    return controller.xem_mon_hoc()
