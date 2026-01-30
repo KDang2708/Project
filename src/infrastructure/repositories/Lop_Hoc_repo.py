@@ -11,11 +11,12 @@ from sqlalchemy.orm import Session
 from domain.models.Nhom.Nhom import Nhom
 
 class LopHocRepository(ILopHocRepository):
-    def __init__(self,session : Session, tai_khoan : ITaiKhoanRepository , mon_hoc : IMonHocRepository , sinh_vien : ISinhVienRepository ):
+    def __init__(self,session : Session, tai_khoan : ITaiKhoanRepository , mon_hoc : IMonHocRepository , sinh_vien : ISinhVienRepository , lop_hoc : ILopHocRepository ):
         self.session = session
         self.repo_tai_khoan= tai_khoan
         self.repo_mon_hoc = mon_hoc
         self.repo_sinh_vien = sinh_vien
+        self.repo_lop_hoc = lop_hoc
     def add(self , lop_hoc : LopHoc  )->LopHoc:
         orm = LopHocORM(
             id_mon_hoc = lop_hoc.mon_hoc.id,
@@ -89,4 +90,9 @@ class LopHocRepository(ILopHocRepository):
         orm_list = self.session.query(LopHocORM).all()
         return [self._to_domain(o) for o in orm_list]
     
+    def get_lop_by_sinh_vien(self , sinh_vien : SinhVien)->list[LopHoc]:
+        orm_list = self.session.query(LopHocHocSinhORM).filter(LopHocHocSinhORM.id_sinh_vien == sinh_vien.id).all()
+        list = [self.repo_lop_hoc.get_by_id(orm.id_lop_hoc) for orm in orm_list]
+        return list
+        
     

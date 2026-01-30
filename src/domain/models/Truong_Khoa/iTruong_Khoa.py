@@ -6,5 +6,5 @@ class ITruongKhoaRepository(ABC):
         pass
 #Hàm add là để thêm một đối tượng TruongKhoa mới vào kho lưu trữ và trả về đối tượng đã được thêm.
     @abstractmethod
-    def get_by_id(self, id: str) -> TruongKhoa | None: #Hàm get_by_id là để lấy một đối tượng TruongKhoa từ kho lưu trữ dựa trên ID của nó. Nếu không tìm thấy, hàm sẽ trả về None.
+    def get_by_id(self, id: str) -> TruongKhoa: #Hàm get_by_id là để lấy một đối tượng TruongKhoa từ kho lưu trữ dựa trên ID của nó. Nếu không tìm thấy, hàm sẽ trả về None.
         pass

@@ -9,7 +9,7 @@ from sqlalchemy import Column, String , ForeignKey
 import uuid
 class AdminORM(Base):
     __tablename__ = "admin"  # tên bảng trong cơ sở dữ liệu
-
+    
     id = Column(String, primary_key=True , default = lambda : str(uuid.uuid()))  # cột ID, kiểu String, là khóa chính
     ten = Column(String)                   # cột tên admin, kiểu String
     id_tai_khoan = Column(String , ForeignKey("tai_khoan"))          # cột ID tài khoản liên kết, kiểu String

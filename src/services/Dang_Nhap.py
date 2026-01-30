@@ -1,18 +1,24 @@
 from domain.models.Tai_Khoan.iTai_Khoan import ITaiKhoanRepository
-from domain.models.Tai_Khoan.Tai_Khoan import TaiKhoan , VaiTro
+from infrastructure.security.jwt import create_access_token
 
-class LoginUseCase:
+class DangNhapUseCase:
     def __init__(self, repo: ITaiKhoanRepository):
         self.repo = repo
 
-    def execute(self, ten_dang_nhap: str, mat_khau: str , vai_tro : VaiTro) -> TaiKhoan | None:
+    def execute(self, ten_dang_nhap: str, mat_khau: str ):
         tai_khoan = self.repo.get_by_ten_dang_nhap(ten_dang_nhap)
         if tai_khoan is None:
-            return None
+            raise Exception("Tài khoản không đúng !")
         if tai_khoan.trang_thai == False:
-            return None
+            raise Exception("Tài khoản đã bị khóa !")
         if tai_khoan.mat_khau != mat_khau:
-            return None
-        if tai_khoan.vai_tro != vai_tro:
-            return None
-        return tai_khoan
+            raise Exception("Sai mật khẩu !")
+        token = create_access_token(
+            {
+                "id_tai_khoan" : tai_khoan.id ,
+                "ten_dang_nhap" : tai_khoan.ten_dang_nhap,
+                "vai_tro" : tai_khoan.vai_tro.value
+            }
+        )
+        return token
+    

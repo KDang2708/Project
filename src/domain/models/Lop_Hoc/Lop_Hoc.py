@@ -4,12 +4,8 @@ from domain.models.Nhom.Nhom import Nhom
 from domain.models.Mon_Hoc.Mon_Hoc import MonHoc
 
 class LopHoc:
-    def __init__(
-        self,
-        mon_hoc: MonHoc,
-        giang_vien: GiangVien
-    ):
-        self.id = None
+    def __init__(self,id : str | None , mon_hoc: MonHoc, giang_vien: GiangVien ):
+        self.id = id
         self.mon_hoc = mon_hoc
         self.giang_vien = giang_vien
         self.danh_sach_hoc_sinh: list[HocSinh] = []

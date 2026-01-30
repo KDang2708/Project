@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from domain.models.Lop_Hoc.Lop_Hoc import LopHoc
 from domain.models.Sinh_Vien.Sinh_Vien import SinhVien
-from domain.models.Nhom.Nhom import Nhom
 class ILopHocRepository(ABC):
     @abstractmethod
     def add(self, lop_hoc: LopHoc) -> LopHoc:
@@ -18,4 +17,7 @@ class ILopHocRepository(ABC):
         pass
     @abstractmethod
     def get_all(self)->list[LopHoc]:
+        pass
+    @abstractmethod
+    def get_lop_by_sinh_vien(self , sinh_vien : SinhVien)->list[LopHoc]:
         pass

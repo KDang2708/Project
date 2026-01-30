@@ -10,3 +10,4 @@ class TaoLopHocUseCase():
     def execute(self, mon_hoc : MonHoc , giang_vien : TaiKhoan )->LopHoc:
         lop_hoc = LopHoc(mon_hoc=mon_hoc,giang_vien=giang_vien)
         return self.repo_lop_hoc.add(lop_hoc)
+        

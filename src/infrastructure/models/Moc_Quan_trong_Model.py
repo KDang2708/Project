@@ -7,12 +7,13 @@
 #         self.mon_hoc = mon_hoc
 #         self.loai_moc = loai_moc
 from infrastructure.databases.base import Base
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String , ForeignKey
+import uuid
 class MocQuanTrongORM(Base):
     __tablename__ = "moc_quan_trong"  # tên bảng trong cơ sở dữ liệu
 
-    id = Column(String, primary_key=True)      # cột ID, kiểu String, là khóa chính
+    id = Column(String, primary_key=True , default=lambda:str(uuid.uuid4()))      # cột ID, kiểu String, là khóa chính
     noi_dung = Column(String)                   # cột nội dung mốc quan trọng, kiểu String
-    id_mon_hoc = Column(String)                 # cột ID môn học liên kết, kiểu String
+    id_mon_hoc = Column(String, ForeignKey("mon_hoc") )                 # cột ID môn học liên kết, kiểu String
     loai_moc = Column(String)                   # cột loại mốc quan trọng, kiểu String
     

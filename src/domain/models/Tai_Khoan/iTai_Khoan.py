@@ -21,3 +21,6 @@ class ITaiKhoanRepository(ABC):
     @abstractmethod
     def update(self , tai_khoan : TaiKhoan)->None:
         pass
+    @abstractmethod
+    def get_by_ten_dang_nhap(self , ten_dang_nhap : str)->TaiKhoan:
+        pass
