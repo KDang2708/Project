@@ -9,12 +9,15 @@ from domain.models.Lop_Hoc.Lop_Hoc import LopHoc
 from api.schemas.requests.Tao_Lop_hoc import TaoLopHocRequest
 from api.schemas.responses.Tao_Lop_Hoc import TaoLopHocResponse
 from services.Tao_Lop_Hoc import TaoLopHocUseCase
+from api.schemas.requests.Phan_Cong_Lop_Hoc import PhanCongLopHocRequest
+from services.Phan_Cong_Lop_Hoc import PhanCongLopHocUseCase
 
 class NhanVienController:
-    def __init__(self , tao_mon_hoc : TaoMonHocUseCase , xem_mon_hoc : XemMonHocUseCase , tao_lop_hoc : TaoLopHocUseCase):
+    def __init__(self , tao_mon_hoc : TaoMonHocUseCase ,phan_cong_lop_hoc : PhanCongLopHocUseCase ,  xem_mon_hoc : XemMonHocUseCase , tao_lop_hoc : TaoLopHocUseCase):
         self.ser_tao_mon_hoc = tao_mon_hoc
         self.ser_xem_mon_hoc = xem_mon_hoc
         self.ser_tao_lop_hoc = tao_lop_hoc
+        self.ser_phan_cong_lop_hoc = phan_cong_lop_hoc
     def tao_mon_hoc(self , request : TaoMonHocRequest)->MonHocResponse:
         try: 
             mon_hoc=self.ser_tao_mon_hoc.execute(request.ten_mon_hoc , request.tin_chi , request.de_cuong)
@@ -59,5 +62,13 @@ class NhanVienController:
         except ValueError as e:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
+                detail=str(e)
+            )
+    def phan_cong_lop_hoc(self , request :PhanCongLopHocRequest ):
+        try:
+            self.ser_phan_cong_lop_hoc.execute(request.id_lop_hoc , request.id_sinh_vien)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)
             )

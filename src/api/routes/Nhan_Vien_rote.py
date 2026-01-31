@@ -9,13 +9,18 @@ from infrastructure.security.dependency import get_current_user
 from services.Tao_Lop_Hoc import TaoLopHocUseCase
 from api.schemas.requests.Tao_Lop_hoc import TaoLopHocRequest
 from api.schemas.responses.Tao_Lop_Hoc import TaoLopHocResponse
+from services.Phan_Cong_Lop_Hoc import PhanCongLopHocUseCase
+from api.schemas.requests.Phan_Cong_Lop_Hoc import PhanCongLopHocRequest
+
+
 router = APIRouter(prefix="/nhan_vien",tags=["NhanVien"])
 
 def get_nhan_vien_controller():
     return NhanVienController(
         tao_mon_hoc = TaoMonHocUseCase(),
         xem_mon_hoc= XemMonHocUseCase(),
-        tao_lop_hoc= TaoLopHocUseCase()
+        tao_lop_hoc= TaoLopHocUseCase(),
+        phan_cong_lop_hoc= PhanCongLopHocUseCase()
     )
 
 @router.put("/tao_mon_hoc",response_model = MonHocResponse , status_code=201)
@@ -38,3 +43,10 @@ def tao_lop_hoc(
     controller : NhanVienController = Depends(get_nhan_vien_controller)
 ):
     return controller.tao_lop_hoc(request)
+@router.post("/phan_cong_lop_hoc",status_code=200)
+def phan_cong_lop_hoc(
+    request : PhanCongLopHocRequest,
+    user = Depends(get_current_user),
+    controller : NhanVienController = Depends(get_nhan_vien_controller)
+):
+    return controller.phan_cong_lop_hoc(request)
