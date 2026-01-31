@@ -1,5 +1,4 @@
-from pydantic import BaseModel , Field
-
+from pydantic import BaseModel 
 class TaiKhoanResponse(BaseModel):
     id_tai_khoan : str
     ten_dang_nhap : str
