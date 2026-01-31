@@ -11,6 +11,13 @@ from api.schemas.requests.Them_Sinh_Vien_Nhom import ThemSinhVienNhomRequest
 from services.Xem_Nhom import XemNhomUseCase
 from api.schemas.responses.Xem_Nhom import XemNhomResponse
 from api.schemas.requests.Xem_Nhom import XemNhomRequest
+from services.Tao_Du_An import TaoDuAnUseCase
+from api.schemas.requests.Tao_Du_An import TaoDuAnRequest
+from api.schemas.responses.Tao_Du_An import TaoDuAnRespone
+from services.Giao_Du_An import GiaoDuAnUseCase
+from api.schemas.requests.Giao_Du_An import GiaoDuAnRequest
+from api.schemas.responses.Xem_Du_An import XemDuAnResponse
+from services.Xem_Du_An import XemDuAnUseCase
 
 router = APIRouter(prefix="/giang_vien",tags=["GiangVien"])
 
@@ -19,6 +26,9 @@ def get_giang_vien_controller():
         xem_lop_hoc = XemLopHocUseCase(),
         phan_nhom= PhanNhomUseCase(),
         xem_nhom= XemNhomUseCase(),
+        tao_du_an=TaoDuAnUseCase(),
+        giao_du_an=GiaoDuAnUseCase(),
+        xem_du_an= XemDuAnUseCase(),
     )
 
 @router.get("/xem_lop_hoc", response_model=list[XemLopHocResponse],status_code=200)
@@ -48,3 +58,23 @@ def xem_nhom(
     controller : GiangVienController = Depends(get_giang_vien_controller)
 ):
     return controller.xem_nhom(request)
+@router.put("/tao_du_an", response_model=TaoDuAnRespone , status_code=201)
+def tao_du_an(
+    request : TaoDuAnRequest,
+    user = Depends(get_current_user),
+    controller : GiangVienController = Depends(get_giang_vien_controller)
+):
+    return controller.tao_du_an(request)
+@router.put("/giao_du_an",status_code=200)
+def giao_du_an(
+    request : GiaoDuAnRequest,
+    user = Depends(get_current_user),
+    controller : GiangVienController = Depends(get_giang_vien_controller)
+):
+    return controller.giao_du_an(request)
+@router.get("/xem_du_an",response_model=list[XemDuAnResponse],status_code=200)
+def xem_du_an(
+    user = Depends(get_current_user),
+    controller : GiangVienController = Depends(get_giang_vien_controller)
+):
+    return controller.xem_du_an()
