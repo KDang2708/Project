@@ -11,7 +11,7 @@ from api.schemas.requests.Tao_Lop_hoc import TaoLopHocRequest
 from api.schemas.responses.Tao_Lop_Hoc import TaoLopHocResponse
 from services.Phan_Cong_Lop_Hoc import PhanCongLopHocUseCase
 from api.schemas.requests.Phan_Cong_Lop_Hoc import PhanCongLopHocRequest
-
+from api.schemas.responses.Xem_Lop_hoc import XemLopHocResponse
 
 router = APIRouter(prefix="/nhan_vien",tags=["NhanVien"])
 
@@ -50,3 +50,9 @@ def phan_cong_lop_hoc(
     controller : NhanVienController = Depends(get_nhan_vien_controller)
 ):
     return controller.phan_cong_lop_hoc(request)
+@router.get("/xem_lop_hoc",response_model=list[XemLopHocResponse],status_code=200)
+def xem_lop_hoc(
+    user = Depends(get_current_user),
+    controller : NhanVienController = Depends(get_nhan_vien_controller)
+):
+    return controller.xem_lop_hoc()
