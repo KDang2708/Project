@@ -15,14 +15,25 @@ from services.Nop_Bai_Nop_Ket_Qua import NopBaiUseCase
 from api.schemas.requests.Thuc_Hien_Kiem_Tra import ThucHienKiemTraRequest
 from api.schemas.responses.Thuc_Hien_Kiem_Tra import BaiKiemTraResponse
 from services.Thuc_Hien_Kiem_Tra import ThucHienKiemTraUseCase
+from api.schemas.requests.Tao_Nhiem_Vu import TaoNhiemVuRequest
+from services.Tao_Nhiem_Vu import TaoNhiemVuUseCase
+from api.schemas.requests.Xem_Tin_Nhan_Lop import XemTinNhanLopRequest
+from api.schemas.responses.Xem_Tin_Lop import TinNhanResponse
+from services.Tro_Chuyen import TroChuyenLopUseCase
+from api.schemas.requests.Xem_Tin_Nhom import XemTinNhomRequest
+from api.schemas.requests.Nhan_Tin import NhanTinRequest
+from api.schemas.responses.Nhan_Tin import NhanTinResponse
+
 
 class SinhVienController:
-    def __init__(self , thuc_hien_kiem_tra : ThucHienKiemTraUseCase ,nop_bai : NopBaiUseCase , xem_lop_hoc : XemLopHocUseCase, xem_nhom : XemNhomUseCase , xem_thong_tin_lop_hoc : XemThongTinLopHocUseCase):
+    def __init__(self , tro_chuyen : TroChuyenLopUseCase , tao_nhiem_vu : TaoNhiemVuUseCase , thuc_hien_kiem_tra : ThucHienKiemTraUseCase ,nop_bai : NopBaiUseCase , xem_lop_hoc : XemLopHocUseCase, xem_nhom : XemNhomUseCase , xem_thong_tin_lop_hoc : XemThongTinLopHocUseCase):
         self.ser_xem_lop_hoc = xem_lop_hoc
         self.ser_xem_nhom = xem_nhom
         self.ser_xem_thong_tin_lop_hoc = xem_thong_tin_lop_hoc
         self.ser_nop_bai = nop_bai
         self.ser_thuc_hien_kiem_tra = thuc_hien_kiem_tra
+        self.ser_tao_nhiem_vu = tao_nhiem_vu
+        self.ser_tro_chuyen = tro_chuyen
     def xem_lop_hoc(self)->list[XemLopHocResponse]:
         try:
             dsLH = self.ser_xem_lop_hoc.execute()
@@ -127,5 +138,67 @@ class SinhVienController:
         except ValueError as e:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
+                detail=str(e)
+            )
+    def tao_nhiem_vu(self , request : TaoNhiemVuRequest):
+        try:
+            self.ser_tao_nhiem_vu.execute(request.noi_dung,request.id_sinh_vien_thuc_hien,request.id_nguoi_tao,request.vai_tro_nguoi_tao,request.ngay_bat_dau , request.ngay_ket_thuc)
+        except ValueError as e :
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=str(e)
+            )
+    def xem_tin_nhan_lop(self , request : XemTinNhanLopRequest)->list[TinNhanResponse]:
+        try:
+            dsTN = self.ser_tro_chuyen.xem_tin_lop(request.id_lop_hoc)
+            return [
+                TinNhanResponse(
+                    id_tin_nhan=tn.id,
+                    noi_dung=tn.noi_dung,
+                    ten_nguoi_gui=tn.nguoi_gui.ten
+                )
+                for tn in dsTN
+            ]
+        except ValueError as e :
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    def xem_tin_nhom(self , request : XemTinNhomRequest)->list[TinNhanResponse]:
+        try:
+            dsTN = self.ser_tro_chuyen.xem_tin_nhom(request.id_lop_hoc , request.id_lop_hoc)
+            return [
+                TinNhanResponse(
+                    id_tin_nhan=tn.id,
+                    noi_dung=tn.noi_dung,
+                    ten_nguoi_gui=tn.nguoi_gui.ten
+                )
+                for tn in dsTN
+            ]
+        except ValueError as e :
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    def nhan_tin(self, request: NhanTinRequest) -> NhanTinResponse:
+        try:
+            tin_nhan = self.ser_tro_chuyen.nhan_tin(
+                request.noi_dung,
+                request.vai_tro_nguoi_gui,
+                request.id_nguoi_gui,
+                request.id_lop_hoc,
+                request.id_nhom
+            )
+
+            return NhanTinResponse(
+                id_tin_nhan=tin_nhan.id,
+                noi_dung=tin_nhan.noi_dung,
+                ten_nguoi_gui=tin_nhan.nguoi_gui.ten,
+                id_lop_hoc=tin_nhan.lop_hoc.id,
+                id_nhom=tin_nhan.nhom.id if tin_nhan.nhom else None
+            )
+        except ValueError as e :
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)
             )

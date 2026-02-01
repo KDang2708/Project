@@ -23,10 +23,17 @@ from api.schemas.requests.Tao_Bai_Kiem_Tra import TaoBaiKiemTraRequest
 from services.Tao_Bai_Kiem_Tra import TaoBaiKiemTraUseCase
 from api.schemas.requests.Tao_Moc_Quan_Trong import TaoMocQuanTrongRequest
 from services.Tao_Moc_Quan_Trong import TaoMocQuanTrongUseCase
+from api.schemas.requests.Tao_Nhiem_Vu import TaoNhiemVuRequest
+from services.Tao_Nhiem_Vu import TaoNhiemVuUseCase
+from api.schemas.responses.Xem_Tin_Lop import TinNhanResponse
+from services.Tro_Chuyen import TroChuyenLopUseCase
+from api.schemas.requests.Xem_Tin_Nhan_Lop import XemTinNhanLopRequest
+from api.schemas.requests.Nhan_Tin import NhanTinRequest
+from api.schemas.responses.Nhan_Tin import NhanTinResponse
 
 
 class GiangVienController:
-    def __init__(self ,tao_moc_quan_trong : TaoMocQuanTrongUseCase, tao_bai_kiem_tra : TaoBaiKiemTraUseCase ,nhan_xet : NhanXetUseCase, xem_du_an : XemDuAnUseCase, xem_lop_hoc : XemLopHocUseCase , phan_nhom : PhanNhomUseCase , xem_nhom : XemNhomUseCase , tao_du_an : TaoDuAnUseCase , giao_du_an : GiaoDuAnUseCase):
+    def __init__(self, tro_chuyen : TroChuyenLopUseCase , tao_nhiem_vu : TaoNhiemVuUseCase ,tao_moc_quan_trong : TaoMocQuanTrongUseCase, tao_bai_kiem_tra : TaoBaiKiemTraUseCase ,nhan_xet : NhanXetUseCase, xem_du_an : XemDuAnUseCase, xem_lop_hoc : XemLopHocUseCase , phan_nhom : PhanNhomUseCase , xem_nhom : XemNhomUseCase , tao_du_an : TaoDuAnUseCase , giao_du_an : GiaoDuAnUseCase):
         self.ser_xem_lop_hoc = xem_lop_hoc
         self.ser_phan_nhom = phan_nhom
         self.ser_xem_nhom = xem_nhom
@@ -36,6 +43,8 @@ class GiangVienController:
         self.ser_nhan_xet = nhan_xet
         self.ser_tao_bai_kiem_tra = tao_bai_kiem_tra
         self.ser_tao_moc_quan_trong = tao_moc_quan_trong
+        self.ser_tao_nhiem_vu = tao_nhiem_vu
+        self.ser_tro_chuyen = tro_chuyen
 
     def xem_lop_hoc(self)->list[XemLopHocResponse]:
         try:
@@ -150,6 +159,52 @@ class GiangVienController:
         try:
             self.ser_tao_moc_quan_trong.execute(request.noi_dung , request.id_mon_hoc , request.loai_moc)
         except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    def tao_nhiem_vu(self , request : TaoNhiemVuRequest):
+        try:
+            self.ser_tao_nhiem_vu.execute(request.noi_dung,request.id_sinh_vien_thuc_hien,request.id_nguoi_tao,request.vai_tro_nguoi_tao,request.ngay_bat_dau , request.ngay_ket_thuc)
+        except ValueError as e :
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=str(e)
+            )
+    def xem_tin_nhan_lop(self , request : XemTinNhanLopRequest)->list[TinNhanResponse]:
+        try:
+            dsTN = self.ser_tro_chuyen.xem_tin_lop(request.id_lop_hoc)
+            return [
+                TinNhanResponse(
+                    id_tin_nhan=tn.id,
+                    noi_dung=tn.noi_dung,
+                    ten_nguoi_gui=tn.nguoi_gui.ten
+                )
+                for tn in dsTN
+            ]
+        except ValueError as e :
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    def nhan_tin(self, request: NhanTinRequest) -> NhanTinResponse:
+        try:
+            tin_nhan = self.ser_tro_chuyen.nhan_tin(
+                request.noi_dung,
+                request.vai_tro_nguoi_gui,
+                request.id_nguoi_gui,
+                request.id_lop_hoc,
+                request.id_nhom
+            )
+
+            return NhanTinResponse(
+                id_tin_nhan=tin_nhan.id,
+                noi_dung=tin_nhan.noi_dung,
+                ten_nguoi_gui=tin_nhan.nguoi_gui.ten,
+                id_lop_hoc=tin_nhan.lop_hoc.id,
+                id_nhom=tin_nhan.nhom.id if tin_nhan.nhom else None
+            )
+        except ValueError as e :
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)

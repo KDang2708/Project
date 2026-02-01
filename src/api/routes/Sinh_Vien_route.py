@@ -17,6 +17,14 @@ from api.schemas.requests.Nop_Bai import NopBaiRequest
 from services.Thuc_Hien_Kiem_Tra import ThucHienKiemTraUseCase
 from api.schemas.responses.Thuc_Hien_Kiem_Tra import BaiKiemTraResponse
 from api.schemas.requests.Thuc_Hien_Kiem_Tra import ThucHienKiemTraRequest
+from services.Tao_Nhiem_Vu import TaoNhiemVuUseCase
+from api.schemas.requests.Tao_Nhiem_Vu import TaoNhiemVuRequest
+from services.Tro_Chuyen import TroChuyenLopUseCase
+from api.schemas.responses.Xem_Tin_Lop import TinNhanResponse
+from api.schemas.requests.Xem_Tin_Nhan_Lop import XemTinNhanLopRequest
+from api.schemas.requests.Xem_Tin_Nhom import XemTinNhomRequest
+from api.schemas.requests.Nhan_Tin import NhanTinRequest
+from api.schemas.responses.Nhan_Tin import NhanTinResponse
 
 router = APIRouter(prefix="/sinh_vien" , tags=["SinhVien"])
 
@@ -27,6 +35,8 @@ def get_sinh_vien_controller():
         xem_thong_tin_lop_hoc=XemThongTinLopHocUseCase(),
         nop_bai=NopBaiUseCase( ),
         thuc_hien_kiem_tra= ThucHienKiemTraUseCase(),
+        tao_nhiem_vu=TaoNhiemVuUseCase(),
+        tro_chuyen=TroChuyenLopUseCase(),
     )
 
 @router.get("/xem_lop_hoc",response_model=list[XemLopHocResponse],status_code=200)
@@ -70,3 +80,31 @@ def thuc_hien_kiem_tra(
     controller : SinhVienController = Depends(get_sinh_vien_controller)
 ):
     return controller.thuc_hien_kiem_tra(request)
+@router.post("/tao_nhiem_vu", status_code=201)
+def tao_nhiem_vu(
+    request : TaoNhiemVuRequest,
+    user = Depends(get_current_user),
+    controller : SinhVienController=Depends(get_sinh_vien_controller)
+):
+    return controller.tao_nhiem_vu(request)
+@router.get("/xem_tin_lop",response_model=list[TinNhanResponse],status_code=200)
+def xem_tin_lop(
+    request : XemTinNhanLopRequest,
+    user =Depends(get_current_user),
+    controller : SinhVienController = Depends(get_sinh_vien_controller)
+):
+    return controller.xem_tin_nhan_lop(request)
+@router.get("/xem_tin_nhom",response_model=list[TinNhanResponse],status_code=200)
+def xem_tin_nhom(
+    request : XemTinNhomRequest,
+    user = Depends(get_current_user),
+    controller : SinhVienController = Depends(get_sinh_vien_controller)
+):
+    return controller.xem_tin_nhom(request)
+@router.post("/nhan_tin",response_model=NhanTinResponse , status_code=201)
+def nhan_tin(
+    request : NhanTinRequest,
+    user = Depends(get_current_user),
+    controller : SinhVienController = Depends(get_sinh_vien_controller)
+):
+    return controller.nhan_tin(request)

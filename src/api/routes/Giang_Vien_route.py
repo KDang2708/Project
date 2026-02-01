@@ -24,6 +24,13 @@ from services.Tao_Bai_Kiem_Tra import TaoBaiKiemTraUseCase
 from api.schemas.requests.Tao_Bai_Kiem_Tra import TaoBaiKiemTraRequest
 from services.Tao_Moc_Quan_Trong import TaoMocQuanTrongUseCase
 from api.schemas.requests.Tao_Moc_Quan_Trong import TaoMocQuanTrongRequest
+from services.Tao_Nhiem_Vu import TaoNhiemVuUseCase
+from api.schemas.requests.Tao_Nhiem_Vu import TaoNhiemVuRequest
+from services.Tro_Chuyen import TroChuyenLopUseCase
+from api.schemas.responses.Xem_Tin_Lop import TinNhanResponse
+from api.schemas.requests.Xem_Tin_Nhan_Lop import XemTinNhanLopRequest
+from api.schemas.requests.Nhan_Tin import NhanTinRequest
+from api.schemas.responses.Nhan_Tin import NhanTinResponse
 
 router = APIRouter(prefix="/giang_vien",tags=["GiangVien"])
 
@@ -38,6 +45,8 @@ def get_giang_vien_controller():
         nhan_xet=NhanXetUseCase(),
         tao_bai_kiem_tra= TaoBaiKiemTraUseCase(),
         tao_moc_quan_trong=TaoMocQuanTrongUseCase(),
+        tao_nhiem_vu=TaoNhiemVuUseCase(),
+        tro_chuyen=TroChuyenLopUseCase(),
     )
 
 @router.get("/xem_lop_hoc", response_model=list[XemLopHocResponse],status_code=200)
@@ -108,3 +117,27 @@ def tao_moc_quan_trong(
     controller : GiangVienController = Depends(get_giang_vien_controller)
 ):
     return controller.tao_moc_quan_trong(request)
+@router.post("/tao_nhiem_vu",status_code=201)
+def tao_nhiem_vu(
+    request : TaoNhiemVuRequest,
+    user = Depends(get_current_user),
+    controller : GiangVienController=Depends(get_giang_vien_controller)
+):
+    return controller.tao_nhiem_vu(request)
+@router.get("/xem_tin_lop",response_model=list[TinNhanResponse],status_code=200)
+def xem_tin_lop(
+    request : XemTinNhanLopRequest,
+    user =Depends(get_current_user),
+    controller : GiangVienController = Depends(get_giang_vien_controller)
+):
+    return controller.xem_tin_nhan_lop(request)
+@router.post("/nhan_tin",response_model=NhanTinResponse , status_code=201)
+def nhan_tin(
+    request : NhanTinRequest,
+    user = Depends(get_current_user),
+    controller : GiangVienController = Depends(get_giang_vien_controller)
+):
+    return controller.nhan_tin(request)
+    
+#     from api.schemas.requests.Nhan_Tin import NhanTinRequest
+# from api.schemas.responses.Nhan_Tin import NhanTinResponse
