@@ -17,17 +17,25 @@ from api.schemas.requests.Giao_Du_An import GiaoDuAnRequest
 from services.Giao_Du_An import GiaoDuAnUseCase
 from services.Xem_Du_An import XemDuAnUseCase
 from api.schemas.responses.Xem_Du_An import XemDuAnResponse
+from api.schemas.requests.Nhan_Xet import NhanXetRequest
+from services.Nhan_Xet import NhanXetUseCase
+from api.schemas.requests.Tao_Bai_Kiem_Tra import TaoBaiKiemTraRequest
+from services.Tao_Bai_Kiem_Tra import TaoBaiKiemTraUseCase
+from api.schemas.requests.Tao_Moc_Quan_Trong import TaoMocQuanTrongRequest
+from services.Tao_Moc_Quan_Trong import TaoMocQuanTrongUseCase
 
 
 class GiangVienController:
-    def __init__(self , xem_du_an : XemDuAnUseCase, xem_lop_hoc : XemLopHocUseCase , phan_nhom : PhanNhomUseCase , xem_nhom : XemNhomUseCase , tao_du_an : TaoDuAnUseCase , giao_du_an : GiaoDuAnUseCase):
+    def __init__(self ,tao_moc_quan_trong : TaoMocQuanTrongUseCase, tao_bai_kiem_tra : TaoBaiKiemTraUseCase ,nhan_xet : NhanXetUseCase, xem_du_an : XemDuAnUseCase, xem_lop_hoc : XemLopHocUseCase , phan_nhom : PhanNhomUseCase , xem_nhom : XemNhomUseCase , tao_du_an : TaoDuAnUseCase , giao_du_an : GiaoDuAnUseCase):
         self.ser_xem_lop_hoc = xem_lop_hoc
         self.ser_phan_nhom = phan_nhom
         self.ser_xem_nhom = xem_nhom
         self.ser_tao_du_an = tao_du_an
         self.ser_giao_du_an = giao_du_an
         self.ser_xem_du_an = xem_du_an
-
+        self.ser_nhan_xet = nhan_xet
+        self.ser_tao_bai_kiem_tra = tao_bai_kiem_tra
+        self.ser_tao_moc_quan_trong = tao_moc_quan_trong
 
     def xem_lop_hoc(self)->list[XemLopHocResponse]:
         try:
@@ -117,6 +125,31 @@ class GiangVienController:
                 for DA in dsDA
             ]
         except ValueError as e :
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    def nhan_xet(self , request : NhanXetRequest ):
+        try:
+            self.ser_nhan_xet.execute(request.noi_dung_nhan_xet , request.id_giang_vien , request.id_bai_lam)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    def tao_bai_kiem_tra(self , request : TaoBaiKiemTraRequest ):
+        try:
+            self.ser_tao_bai_kiem_tra.execute(request.tieu_de , request.de_kiem_tra , request.id_mon_hoc)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    
+    def tao_moc_quan_trong(self , request : TaoMocQuanTrongRequest):
+        try:
+            self.ser_tao_moc_quan_trong.execute(request.noi_dung , request.id_mon_hoc , request.loai_moc)
+        except ValueError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)

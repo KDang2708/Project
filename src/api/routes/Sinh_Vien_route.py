@@ -12,6 +12,11 @@ from api.schemas.requests.Xem_Nhom_SV import XemNhomSVRequest
 from services.Xem_Thong_Tin_Lop_Hoc import XemThongTinLopHocUseCase
 from api.schemas.responses.Xem_Thong_Tin_Lop_Hoc import XemThongTinLopHocResponse
 from api.schemas.requests.Xem_Thong_Tin_Lop_Hoc import XemThongTinLopHocRequest
+from services.Nop_Bai_Nop_Ket_Qua import NopBaiUseCase
+from api.schemas.requests.Nop_Bai import NopBaiRequest
+from services.Thuc_Hien_Kiem_Tra import ThucHienKiemTraUseCase
+from api.schemas.responses.Thuc_Hien_Kiem_Tra import BaiKiemTraResponse
+from api.schemas.requests.Thuc_Hien_Kiem_Tra import ThucHienKiemTraRequest
 
 router = APIRouter(prefix="/sinh_vien" , tags=["SinhVien"])
 
@@ -20,6 +25,8 @@ def get_sinh_vien_controller():
         xem_lop_hoc=XemLopHocUseCase(),
         xem_nhom=XemNhomUseCase(),
         xem_thong_tin_lop_hoc=XemThongTinLopHocUseCase(),
+        nop_bai=NopBaiUseCase( ),
+        thuc_hien_kiem_tra= ThucHienKiemTraUseCase(),
     )
 
 @router.get("/xem_lop_hoc",response_model=list[XemLopHocResponse],status_code=200)
@@ -49,3 +56,17 @@ def xem_thong_tin_lop_hoc(
     controller : SinhVienController = Depends(get_sinh_vien_controller)
 ):
     return controller.ser_xem_thong_tin_lop_hoc(request)
+@router.post("/nop_bai",status_code=201)
+def nop_bai(
+    request : NopBaiRequest,
+    user = Depends(get_current_user),
+    controller : SinhVienController = Depends(get_sinh_vien_controller)
+): 
+    return controller.nop_bai_lam(request)
+@router.get("/thuc_hien_kiem_tra",response_model=list[BaiKiemTraResponse],status_code=200)
+def thuc_hien_kiem_tra(
+    request : ThucHienKiemTraRequest,
+    user =Depends(get_current_user),
+    controller : SinhVienController = Depends(get_sinh_vien_controller)
+):
+    return controller.thuc_hien_kiem_tra(request)

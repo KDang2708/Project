@@ -10,12 +10,19 @@ from services.Xem_Nhom import XemNhomUseCase
 from api.schemas.requests.Xem_Thong_Tin_Lop_Hoc import XemThongTinLopHocRequest
 from api.schemas.responses.Xem_Thong_Tin_Lop_Hoc import XemThongTinLopHocResponse , LopHocResponse , MocQuanTrongResponse , BaiKiemTraResponse
 from services.Xem_Thong_Tin_Lop_Hoc import XemThongTinLopHocUseCase
+from api.schemas.requests.Nop_Bai import NopBaiRequest
+from services.Nop_Bai_Nop_Ket_Qua import NopBaiUseCase
+from api.schemas.requests.Thuc_Hien_Kiem_Tra import ThucHienKiemTraRequest
+from api.schemas.responses.Thuc_Hien_Kiem_Tra import BaiKiemTraResponse
+from services.Thuc_Hien_Kiem_Tra import ThucHienKiemTraUseCase
 
 class SinhVienController:
-    def __init__(self , xem_lop_hoc : XemLopHocUseCase, xem_nhom : XemNhomUseCase , xem_thong_tin_lop_hoc : XemThongTinLopHocUseCase):
+    def __init__(self , thuc_hien_kiem_tra : ThucHienKiemTraUseCase ,nop_bai : NopBaiUseCase , xem_lop_hoc : XemLopHocUseCase, xem_nhom : XemNhomUseCase , xem_thong_tin_lop_hoc : XemThongTinLopHocUseCase):
         self.ser_xem_lop_hoc = xem_lop_hoc
         self.ser_xem_nhom = xem_nhom
         self.ser_xem_thong_tin_lop_hoc = xem_thong_tin_lop_hoc
+        self.ser_nop_bai = nop_bai
+        self.ser_thuc_hien_kiem_tra = thuc_hien_kiem_tra
     def xem_lop_hoc(self)->list[XemLopHocResponse]:
         try:
             dsLH = self.ser_xem_lop_hoc.execute()
@@ -94,6 +101,30 @@ class SinhVienController:
                 ],
             )
         except HTTPException as e:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=str(e)
+            )
+    def nop_bai_lam(self, request : NopBaiRequest):
+        try:
+            self.ser_nop_bai.execute(request.noi_dung_bai_lam , request.loai_bai_lam , request.id_bai_kiem_tra , request.id_sinh_vien)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+    def thuc_hien_kiem_tra( self , request : ThucHienKiemTraRequest )->list[BaiKiemTraResponse]:
+        try:
+            dsBKT = self.ser_thuc_hien_kiem_tra.execute(request.id_sinh_vien)
+            return [
+                BaiKiemTraResponse(
+                    id_bai_kiem_tra=BKT.id,
+                    tieu_de=BKT.tieu_de,
+                    de_kiem_tra=BKT.de_kiem_tra
+                )
+                for BKT in dsBKT
+            ]
+        except ValueError as e:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=str(e)
