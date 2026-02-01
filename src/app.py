@@ -65,10 +65,29 @@ app = create_app()
 
 if __name__ == "__main__":
     import uvicorn
-    # reload=False tránh lỗi PermissionError với StatReload trên Windows
+    import socket
+
+    host = "0.0.0.0"
+    port = 8888
+    
+    # Lấy địa chỉ IP thật của máy trong mạng nội bộ (optional)
+    try:
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+    except:
+        local_ip = "127.0.0.1"
+
+    print("\n" + "="*50)
+    print(f"🚀 API đang khởi động!")
+    print(f"🔗 Truy cập tại local: http://127.0.0.1:{port}")
+    print(f"🔗 Truy cập tại docs:  http://127.0.0.1:{port}/docs")
+    print(f"🌐 Truy cập qua mạng:  http://{local_ip}:{port}")
+    print("="*50 + "\n")
+
     uvicorn.run(
         "app:app",
-        host="0.0.0.0",
-        port=9999,
+        host=host,
+        port=port,
         reload=False,
+        log_level="info"
     )
